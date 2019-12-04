@@ -22,7 +22,11 @@ extension URLSession: NetworkDownloaderProtocol {
 }
 
 class NetworkMockDownloader: NetworkDownloaderProtocol {
+    var data: Data?
+    
     func executeRequestAsynchronously(request: URLRequest, completion: @escaping (Data?, Error?) -> Void) {
-        // Load the file and send it back via completion.
+        DispatchQueue.global().async {
+            completion(self.data, nil)
+        }
     }
 }
