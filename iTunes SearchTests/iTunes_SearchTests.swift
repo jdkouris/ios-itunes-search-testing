@@ -11,7 +11,7 @@ import XCTest
 
 class iTunes_SearchTests: XCTestCase {
 
-    func testPerformSearch() {
+    func testSuccessfulMockSearch() {
         let controller = SearchResultController()
         
         let expectation = self.expectation(description: "Waiting for iTunes API to return valid results")
@@ -30,12 +30,6 @@ class iTunes_SearchTests: XCTestCase {
         }
         
         wait(for: [expectation], timeout: 5)
-    }
-    
-    func testMockSearch() {
-//        let controller = SearchResultController()
-        
-//        controller.performSearch(for: <#T##String#>, resultType: <#T##ResultType#>, completion: <#T##() -> Void#>)
     }
 
 }
