@@ -17,7 +17,7 @@ class iTunes_SearchTests: XCTestCase {
         let expectation = self.expectation(description: "Waiting for iTunes API to return valid results")
         
         // Load the file and send it back via completion.
-        let bundle = Bundle(for: NetworkMockDownloader.self)
+        let bundle = Bundle(for: iTunes_SearchTests.self)
         let path = bundle.path(forResource: "iTunes_api_real_results", ofType: "js")!
         let fileData = try! Data(contentsOf: URL(fileURLWithPath: path))
         
@@ -26,6 +26,27 @@ class iTunes_SearchTests: XCTestCase {
         
         controller.performSearch(baseURL: controller.baseURL, for: "Tweetbot", resultType: .software, networkDownloader: mockNetworkDownloader) {
             XCTAssert(!controller.searchResults.isEmpty)
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 5)
+    }
+    
+    func testInvalidJSONMockSearch() {
+        let controller = SearchResultController()
+        
+        let expectation = self.expectation(description: "Waiting for iTunes API to return valid results")
+        
+        // Load the file and send it back via completion.
+        let bundle = Bundle(for: iTunes_SearchTests.self)
+        let path = bundle.path(forResource: "iTunes_api_invalid_results", ofType: "js")!
+        let fileData = try! Data(contentsOf: URL(fileURLWithPath: path))
+        
+        let mockNetworkDownloader = NetworkMockDownloader()
+        mockNetworkDownloader.data = fileData
+        
+        controller.performSearch(baseURL: controller.baseURL, for: "Tweetbot", resultType: .software, networkDownloader: mockNetworkDownloader) {
+            XCTAssert(controller.searchResults.isEmpty)
             expectation.fulfill()
         }
         
