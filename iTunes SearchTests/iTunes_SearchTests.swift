@@ -12,13 +12,16 @@ import XCTest
 class iTunes_SearchTests: XCTestCase {
 
     func testPerformSearch() {
-        print("Test began")
         let controller = SearchResultController()
+        
+        let expectation = self.expectation(description: "Waiting for iTunes API to return valid results")
         
         controller.performSearch(for: "Tweetbot", resultType: .software) {
             XCTAssert(!controller.searchResults.isEmpty)
-            print("Test finished")
+            expectation.fulfill()
         }
+        
+        wait(for: [expectation], timeout: 5)
     }
 
 }
