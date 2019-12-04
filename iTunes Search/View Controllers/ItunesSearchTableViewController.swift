@@ -9,15 +9,18 @@
 import UIKit
 
 class ItunesSearchTableViewController: UITableViewController, UISearchBarDelegate {
+    
+    let searchResultController = SearchResultController()
+    
+    @IBOutlet weak var resultTypeSegmentedControl: UISegmentedControl!
+    @IBOutlet weak var searchBar: UISearchBar!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         searchBar.delegate = self
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-    
         guard let searchTerm = searchBar.text,
             searchTerm != "" else { return }
     
@@ -57,12 +60,5 @@ class ItunesSearchTableViewController: UITableViewController, UISearchBarDelegat
 
         return cell
     }
-
-
-    let searchResultController = SearchResultController()
     
-    @IBOutlet weak var resultTypeSegmentedControl: UISegmentedControl!
-    @IBOutlet weak var searchBar: UISearchBar!
-    
-
 }
