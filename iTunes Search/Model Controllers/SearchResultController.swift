@@ -13,12 +13,10 @@ class SearchResultController {
     let baseURL = URL(string: "https://itunes.apple.com/search")!
     var searchResults: [SearchResult] = []
     
-    
-    
     func performSearch(baseURL: URL,
                        for searchTerm: String,
                        resultType: ResultType,
-                       networkResponsibleObject: Any,
+                       networkDownloader: NetworkDownloaderProtocol,
                        completion: @escaping () -> Void) {
         
         // Creating URL components.
@@ -35,14 +33,11 @@ class SearchResultController {
         request.httpMethod = HTTPMethod.get.rawValue
         
         // Offload the networking to another class (URLSession)
-        networkResponsibleObject.executeRequestAsynchronously(request) { data, error
+        networkDownloader.executeRequestAsynchronously(request: request) { (possibleData, possibleError) in
             
-        }
-        let dataTask = networkResponsibleObject.dataTask(with: request) { (data, _, error) in
-            
-            // Validate that the information is correct.
-            if let error = error { NSLog("Error fetching data: \(error)") }
-            guard let data = data else { completion(); return }
+            // Validate that the information is correct
+            if let error = possibleError { NSLog("Error fetching data: \(error)") }
+            guard let data = possibleData else { completion(); return }
             
             do {
                 // Parse the data.
@@ -58,7 +53,7 @@ class SearchResultController {
             // Notify the caller that we're done.
             completion()
         }
-        dataTask.resume()
+        
     }
     
 }
